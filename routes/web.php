@@ -11,6 +11,7 @@ use App\Http\Controllers\ThreadController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReplyController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\AdminMiddleware;
 
 Route::get('/', [ThreadController::class, 'index']);
 
@@ -39,9 +40,9 @@ Route::post('/user/{user}/follow', [FollowerController::class, 'follow'])->name(
 Route::delete('/user/{user}/unfollow', [FollowerController::class, 'unfollow'])->name('user.unfollow');
 
 // Admin routes
-// Route::middleware(['auth', 'is_admin'])->group(function () {
+Route::middleware(AdminMiddleware::class)->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-// });
+});
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
