@@ -48,6 +48,10 @@ Route::middleware(AdminMiddleware::class)->group(function () {
     Route::delete('/admin/users/{user}', [AdminUsersController::class, 'destroy'])->name('admin.users.destroy');
     Route::get('/admin/categories', [CategoryController::class, 'index'])->name('admin.categories');
     Route::delete('/admin/categories/{category}', [CategoryController::class, 'destroy'])->name('admin.categories.destroy');
+    Route::get('/admin/categories/createForm', [CategoryController::class, 'createForm'])->name('admin.categories.createForm');
+    Route::post('/admin/categories/store', [CategoryController::class, 'store'])->name('admin.categories.store');
+    Route::get('/admin/categories/{category}/edit', [CategoryController::class, 'edit'])->name('admin.categories.edit');
+    Route::put('/admin/categories/{category}/update', [CategoryController::class, 'update'])->name('admin.categories.update');
 });
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -3,9 +3,11 @@
         <div class="flex justify-between items-center">
             <h1 class="text-2xl font-semibold">Categories</h1>
             <div>
-                <Link class="bg-blue-500 px-4 py-2 text-white rounded-2xl"
-                    >Create</Link
+                <Link :href="route('admin.categories.createForm')"
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow hover:opacity-95 disabled:opacity-60"
                 >
+                    Create
+                </Link>
             </div>
         </div>
 
@@ -81,17 +83,16 @@
                             <td
                                 class="px-6 py-4 text-gray-600 text-sm space-x-4 gap-0 flex"
                             >
-                                <button
-
+                                <Link
+                                    :href="route('admin.categories.edit', category.id)"
                                     class="bg-yellow-100 text-yellow-700 px-2 py-2 rounded-lg font-semibold shadow hover:bg-yellow-200 transition flex items-center gap-2"
-                                is="a"
                                 >
                                     <!-- Edit Icon -->
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536M9 13l6.586-6.586a2 2 0 112.828 2.828L11.828 15.828a2 2 0 01-2.828 0L9 13z"/>
                                     </svg>
 
-                                </button>
+                                </Link>
                                 <button
                                     @click="openDeleteModal(category)"
                                     class="bg-red-100 text-red-700 px-2 py-2 rounded-lg font-semibold shadow hover:bg-red-200 transition flex items-center gap-2"
