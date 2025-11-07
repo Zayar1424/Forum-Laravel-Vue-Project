@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminUsersController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FollowerController;
 use Inertia\Inertia;
 use App\Models\Thread;
@@ -42,6 +44,10 @@ Route::delete('/user/{user}/unfollow', [FollowerController::class, 'unfollow'])-
 // Admin routes
 Route::middleware(AdminMiddleware::class)->group(function () {
     Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/admin/users', [AdminUsersController::class, 'index'])->name('admin.users');
+    Route::delete('/admin/users/{user}', [AdminUsersController::class, 'destroy'])->name('admin.users.destroy');
+    Route::get('/admin/categories', [CategoryController::class, 'index'])->name('admin.categories');
+    Route::delete('/admin/categories/{category}', [CategoryController::class, 'destroy'])->name('admin.categories.destroy');
 });
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -79,7 +79,7 @@
             <div class="bg-white rounded-lg shadow-sm border p-4">
                 <div class="flex items-center justify-between mb-4">
                     <h2 class="text-lg font-semibold text-gray-900">Latest Users</h2>
-                    <a href="#" class="text-sm text-indigo-600 hover:underline">View all</a>
+                    <Link :href="route('admin.users')" class="text-sm text-indigo-600 hover:underline">View all</Link>
                 </div>
                 <ul class="space-y-3">
 
@@ -122,8 +122,10 @@
 
 <script>
 import moment from 'moment'
+import { Link, router } from '@inertiajs/vue3';
 export default {
     name: 'AdminDashboard',
+    components: { Link },
     props: {
         stats: Object,
         latestUsers: Array,
