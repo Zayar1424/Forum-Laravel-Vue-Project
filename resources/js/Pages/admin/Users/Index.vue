@@ -2,14 +2,30 @@
     <div class="space-y-6">
         <div class="flex justify-between items-center">
             <h1 class="text-2xl font-semibold">Users</h1>
-            <div>
-                <Link class="bg-blue-500 px-4 py-2 text-white rounded-2xl"
-                    >Create</Link
+            <div class="flex flex-row items-center gap-4">
+                <!-- Search bar -->
+                        <div class="relative w-full">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </span>
+                            <input
+                                v-model="search"
+                                type="text"
+                                placeholder="Search for users"
+                                class="w-full rounded-md bg-white-800 py-2.5 pl-10 text-sm text-gray-800 placeholder-gray-400 focus:ring-1 focus:outline-none"
+                            />
+                        </div>
+                <Link :href="route('admin.users.userForm')"
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow hover:opacity-95 disabled:opacity-60"
                 >
+                    Create
+                </Link>
             </div>
         </div>
 
-        <!-- Category List Start -->
+        <!-- User List Start -->
         <div class="bg-white rounded-xl border shadow-sm overflow-hidden">
             <div class="px-6 py-4 border-b bg-gray-50">
                 <div class="flex items-center justify-between">
@@ -56,7 +72,7 @@
                     </thead>
                     <tbody class="divide-y">
                         <tr
-                            v-for="user in users"
+                            v-for="user in filteredUsers"
                             :key="user.id"
                             class="hover:bg-gray-50"
                         >
@@ -88,8 +104,8 @@
                             <td
                                 class="px-6 py-4 text-gray-600 text-sm space-x-4 gap-0 flex"
                             >
-                                <button
-
+                                <Link
+                                    :href="route('admin.users.edit', user.id)"
                                     class="bg-yellow-100 text-yellow-700 px-2 py-2 rounded-lg font-semibold shadow hover:bg-yellow-200 transition flex items-center gap-2"
                                 is="a"
                                 >
@@ -98,7 +114,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536M9 13l6.586-6.586a2 2 0 112.828 2.828L11.828 15.828a2 2 0 01-2.828 0L9 13z"/>
                                     </svg>
 
-                                </button>
+                                </Link>
                                 <button
                                     v-if="!user.is_admin"
                                     @click="openDeleteModal(user)"
@@ -116,7 +132,7 @@
                 </table>
             </div>
         </div>
-        <!-- Category List End -->
+        <!-- User List End -->
         <!-- Modal Popup Start -->
         <div
             v-if="showModal"
@@ -152,6 +168,7 @@
 
 <script>
 import { Link, router } from "@inertiajs/vue3";
+import { ref } from "vue";
 
 export default {
     components: { Link },
@@ -159,10 +176,22 @@ export default {
         return {
             showModal: false,
             userToDelete: null,
+            search: '',
         };
     },
     props: {
         users: { type: Array, required: true },
+    },
+    computed: {
+        filteredUsers() {
+            if (this.search.trim() === '') {
+                return this.users;
+            }
+            return this.users.filter(user =>
+                user.name.toLowerCase().includes(this.search.toLowerCase()) ||
+                user.email.toLowerCase().includes(this.search.toLowerCase())
+            );
+        },
     },
     methods: {
         formatDate(value) {

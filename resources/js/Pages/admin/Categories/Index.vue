@@ -2,7 +2,21 @@
     <div class="space-y-6">
         <div class="flex justify-between items-center">
             <h1 class="text-2xl font-semibold">Categories</h1>
-            <div>
+            <div class="flex flex-row items-center gap-4">
+                <!-- Search bar -->
+                        <div class="relative w-full">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </span>
+                            <input
+                                v-model="search"
+                                type="text"
+                                placeholder="Search for categories"
+                                class="w-full rounded-md bg-white-800 py-2.5 pl-10 text-sm text-gray-800 placeholder-gray-400 focus:ring-1 focus:outline-none"
+                            />
+                        </div>
                 <Link :href="route('admin.categories.createForm')"
                     class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow hover:opacity-95 disabled:opacity-60"
                 >
@@ -57,7 +71,7 @@
                     </thead>
                     <tbody class="divide-y">
                         <tr
-                            v-for="category in categories"
+                            v-for="category in filteredCategories"
                             :key="category.id"
                             class="hover:bg-gray-50"
                         >
@@ -152,7 +166,19 @@ export default {
         return {
             showModal: false,
             categoryToDelete: null,
+            search: "",
         };
+    },
+    computed: {
+        filteredCategories() {
+            if (!this.search) {
+                return this.categories;
+            }
+            const searchLower = this.search.toLowerCase();
+            return this.categories.filter((category) =>
+                category.name.toLowerCase().includes(searchLower)
+            );
+        },
     },
     props: {
         categories: { type: Array, required: true },

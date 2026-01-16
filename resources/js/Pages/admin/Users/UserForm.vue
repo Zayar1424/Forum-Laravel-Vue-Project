@@ -9,9 +9,9 @@
         </div>
         <div>
           <h1 class="text-2xl font-semibold text-gray-800">
-            {{ isEdit ? 'Edit Category' : 'Create Category' }}
+            {{ isEdit ? 'Edit User' : 'Create User' }}
           </h1>
-          <p class="text-sm text-gray-500">Add a new category to organize threads.</p>
+          <p class="text-sm text-gray-500">Add a new user to the system.</p>
         </div>
       </div>
 
@@ -39,7 +39,7 @@
     <div class="bg-white rounded-xl border shadow-sm overflow-hidden">
       <div class="px-6 py-5 border-b bg-gray-50">
         <div class="flex items-center justify-between">
-          <div class="font-medium text-gray-700">Category Details</div>
+          <div class="font-medium text-gray-700">User Details</div>
           <!-- <div class="text-sm text-gray-500">All fields are optional except name</div> -->
         </div>
       </div>
@@ -53,9 +53,8 @@
             </div>
             <input
               v-model="form.name"
-              @input="generateSlug"
               type="text"
-              placeholder="e.g. General Discussion"
+              placeholder="e.g. John Doe"
               class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-200"
               maxlength="100"
             />
@@ -64,30 +63,45 @@
 
           <label class="block">
             <div class="flex items-center justify-between mb-2">
-              <span class="text-sm font-medium text-gray-700">Slug</span>
-              <span class="text-xs text-gray-400">URL friendly</span>
+              <span class="text-sm font-medium text-gray-700">Email</span>
             </div>
             <input
-              v-model="form.slug"
+              v-model="form.email"
               type="text"
-              placeholder="e.g. general-discussion"
+              placeholder="e.g. user@example.com"
               class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-200"
             />
-            <p class="text-xs text-gray-400 mt-2">Slug should contain only letters, numbers and dashes.</p>
-            <p v-if="errors?.slug" class="text-sm text-red-600 mt-2">{{ errors.slug }}</p>
+            <p class="text-xs text-gray-400 mt-2">Email should be a valid email address.</p>
+            <p v-if="errors?.email" class="text-sm text-red-600 mt-2">{{ errors.email }}</p>
           </label>
 
           <label class="block">
             <div class="flex items-center justify-between mb-2">
-              <span class="text-sm font-medium text-gray-700">Description</span>
+              <span class="text-sm font-medium text-gray-700">Password</span>
             </div>
-            <textarea
-              v-model="form.description"
-              rows="4"
-              placeholder="Short description that appears on category list"
+            <input
+              v-model="form.password"
+              type="password"
+              placeholder="Enter password"
               class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-200"
-            ></textarea>
-            <p v-if="errors?.description" class="text-sm text-red-600 mt-2">{{ errors.description }}</p>
+            />
+            <p class="text-xs text-gray-400 mt-2">Use strong password.</p>
+            <p v-if="errors?.password" class="text-sm text-red-600 mt-2">{{ errors.password }}</p>
+          </label>
+
+          <label class="block">
+            <div class="flex items-center justify-between mb-2">
+              <span class="text-sm font-medium text-gray-700">Role</span>
+            </div>
+            <select
+              v-model="form.role"
+              class="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-200"
+            >
+            <option value="" disabled>Select role</option>
+              <option value=0>User</option>
+              <option value=1>Admin</option>
+            </select>
+            <p v-if="errors?.role" class="text-sm text-red-600 mt-2">{{ errors.role }}</p>
           </label>
         </div>
 
@@ -105,10 +119,9 @@
                 </div>
                 <div class="flex-1">
                   <div class="flex items-center justify-between">
-                    <div class="text-sm font-semibold text-gray-800">{{ form.name || 'Category name' }}</div>
-                    <div class="text-xs text-gray-400">/categories/{{ form.slug || 'slug' }}</div>
+                    <div class="text-sm font-semibold text-gray-800">{{ form.name || 'User name' }}</div>
                   </div>
-                  <p class="text-sm text-gray-600 mt-1">{{ form.description || 'Short description about the category.' }}</p>
+                  <p class="text-sm text-gray-600 mt-1">{{ form.email || 'user@example.com' }}</p>
                 </div>
               </div>
             </div>
@@ -125,49 +138,40 @@ import { Link, router} from '@inertiajs/vue3'
 export default {
   components: { Link },
   props: {
-    category: { type: Object, default: null },
+    user: { type: Object, default: null },
     errors: { type: Object, default: () => ({}) },
-    backUrl: { type: String, default: () => route('admin.categories') },
+    backUrl: { type: String, default: () => route('admin.users') },
   },
   data() {
     return {
       form: {
-        name: this.category?.name || '',
-        slug: this.category?.slug || '',
-        description: this.category?.description || '',
+        name: this.user?.name || '',
+        email: this.user?.email || '',
+        role: this.user?.is_admin || '',
+        password: this.user?.password || '',
       },
       submitting: false,
     }
   },
   computed: {
     isEdit() {
-      return !!this.category
+      return !!this.user
     },
     previewInitial() {
-      return (this.form.name || 'C').charAt(0).toUpperCase()
+      return (this.form.name || 'U').charAt(0).toUpperCase()
     }
   },
   methods: {
-    generateSlug() {
-      // simple client-side slugify for preview convenience
-      this.form.slug = this.form.name
-        .toLowerCase()
-        .trim()
-        .replace(/[^a-z0-9\s-]/g, '')
-        .replace(/\s+/g, '-')
-        .replace(/-+/g, '-')
-        .slice(0, 80)
-    },
     submit() {
       // UI-only: emit event so parent/controller can handle persistence
       this.submitting = true
       this.$emit('submit', { ...this.form, isEdit: this.isEdit })
     //   // allow parent to toggle submitting off; keep simple here
       setTimeout(() => (this.submitting = false), 600)
-        if (this.category) {
-            router.put(route("admin.categories.update", this.category.id), this.form);
+        if (this.user) {
+            router.put(route("admin.users.update", this.user.id), this.form);
         } else {
-            router.post(route("admin.categories.store"), this.form);
+            router.post(route("admin.users.store"), this.form);
         }
     }
   }

@@ -5,14 +5,14 @@
                 <h1 class="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
                 <p class="text-sm text-gray-500">Overview of forum activity</p>
             </div>
-            <div class="flex items-center space-x-3">
+            <!-- <div class="flex items-center space-x-3">
                 <input
                     type="search"
                     placeholder="Search users or threads..."
                     class="px-3 py-2 border rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
                 <button class="px-4 py-2 bg-indigo-600 text-white rounded-md text-sm hover:bg-indigo-700">New report</button>
-            </div>
+            </div> -->
         </header>
 
         <!-- Stat cards -->
@@ -100,7 +100,7 @@
             <div class="bg-white rounded-lg shadow-sm border p-4">
                 <div class="flex items-center justify-between mb-4">
                     <h2 class="text-lg font-semibold text-gray-900">Latest Threads</h2>
-                    <a href="#" class="text-sm text-indigo-600 hover:underline">View all</a>
+                    <!-- <a href="#" class="text-sm text-indigo-600 hover:underline">View all</a> -->
                 </div>
                 <ul class="space-y-4">
                     <li v-for="thread in latestThreads" :key="thread.id">

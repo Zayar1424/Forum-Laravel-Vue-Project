@@ -2,7 +2,7 @@
     <div class="min-h-screen bg-gradient-to-br from-indigo-100 via-white to-purple-100 py-16 px-4">
         <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-2xl p-10">
             <!-- Back Button and Thread Title -->
-            <div class="flex items-center gap-4 mb-4">
+            <div class="flex flex-col md:flex-row md:items-center gap-4 mb-4">
                 <button
                     @click="goBack"
                     class="flex items-center gap-2 px-3 py-2 bg-indigo-100 text-indigo-700 rounded-lg hover:bg-indigo-200 transition font-semibold shadow"
@@ -15,7 +15,7 @@
                 <h1 class="text-3xl font-extrabold text-indigo-700">{{ thread.title }}</h1>
             </div>
             <!-- Meta Info -->
-            <div class="flex items-center gap-4 mb-6 text-gray-500 text-sm">
+            <div class="flex flex-col md:flex-row md:items-center gap-4 mb-6 text-gray-500 text-sm">
                 <span>
                     <svg class="inline w-5 h-5 mr-1 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.657 6.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -82,13 +82,17 @@
                     :key="reply.id"
                     class="bg-indigo-50 rounded-xl p-6 shadow flex flex-col gap-2"
                 >
-                    <div class="flex items-center gap-3 mb-2">
+                    <div class="flex flex-col md:flex-row md:items-center gap-3 mb-2">
+                        <div class="flex flex-row gap-2 items-center">
                         <Link :href="route('user.show', reply.user.id)" class=" w-8 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-500 flex items-center justify-center text-white font-bold text-xl">
                             {{ (reply.user?.name || 'A').charAt(0).toUpperCase() }}
 
                         </Link>
                         <span class="font-semibold text-indigo-700">{{ reply.user?.name || 'Anonymous' }}</span>
+                        </div>
+                        <div>
                         <span class="text-gray-400 text-xs">{{ moment(reply.created_at).format('MMM D, YYYY, h:mm A') }}</span>
+                        </div>
                     </div>
                     <div v-if="reply.editing">
                         <textarea

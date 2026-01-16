@@ -22,11 +22,11 @@
             </button>
         </div>
         <!-- Header -->
-        <div class="flex items-center gap-4 border-b pb-6 justify-between">
+        <div class="flex flex-col md:flex-row md:tems-center gap-4 border-b pb-6 justify-between">
             <div class="flex items-center gap-4">
                 <!-- Profile Avatar -->
                 <div
-                    class="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-blue-500 flex items-center justify-center text-white font-bold text-2xl shadow-lg"
+                    class="hidden md:flex w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-blue-500 flex items-center justify-center text-white font-bold text-2xl shadow-lg"
                 >
                     {{ (user.name || "U").charAt(0).toUpperCase() }}
                 </div>
@@ -140,7 +140,7 @@
                     <!-- Edit & Delete buttons at bottom right -->
                     <div
                         v-if="$page.props.auth.user && $page.props.auth.user.id === thread.user_id"
-                        class="absolute bottom-4 right-4 flex gap-2"
+                        class="md:absolute bottom-4 right-4 flex gap-2"
                     >
                         <Link
                             :href="route('threads.edit', thread.id)"
@@ -151,7 +151,7 @@
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536M9 13l6.586-6.586a2 2 0 112.828 2.828L11.828 15.828a2 2 0 01-2.828 0L9 13z"/>
                             </svg>
-                            Edit
+
                         </Link>
                         <button
                             @click="openDeleteModal(thread)"
@@ -161,7 +161,7 @@
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3m-7 0h10"/>
                             </svg>
-                            Delete
+
                         </button>
                     </div>
                 </div>
@@ -197,15 +197,17 @@
                         </svg>
                         See original thread
                     </Link>
-                    <div class="flex items-center gap-3 mb-2">
-                        <div
-                            class="w-8 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-500 flex items-center justify-center text-white font-bold text-xl"
+                    <div class="flex flex-col md:flex-row md:items-center gap-3 mb-2">
+                        <div class="flex flex-row gap-2">
+                        <p
+                            class="hidden md:flex w-8 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-500 flex items-center justify-center text-white font-bold text-xl"
                         >
                             {{ user.name.charAt(0).toUpperCase() }}
-                        </div>
+                        </p>
                         <span class="font-semibold text-indigo-700">{{
                             user.name
                         }}</span>
+                        </div>
                         <span class="text-gray-400 text-xs">{{
                             moment(reply.created_at).format(
                                 "MMM D, YYYY, h:mm A"

@@ -1,9 +1,9 @@
 <template>
-  <div class="max-w-4xl mx-auto p-6">
+  <div class="max-w-4xl mx-auto p-0 md:p-6">
     <!-- Header -->
     <div class="flex items-center justify-between mb-6">
       <h1 class="text-2xl font-bold text-gray-900">Forum Threads</h1>
-      <div class="flex items-center gap-3">
+      <div class="flex flex-col lg:flex-row items-center gap-3">
         <Link
           v-if="$page.props.auth.user"
           href="/new-thread"
@@ -57,7 +57,7 @@
             · <Link :href="route('threads.show', thread.id)" class="text-indigo-600 hover:underline">View</Link>
           </div>
 
-          <div v-if="$page.props.auth.user && $page.props.auth.user.id === thread.user_id" class="flex gap-2">
+          <div v-if="$page.props.auth.user && $page.props.auth.user.id === thread.user_id" class="md:absolute bottom-4 right-4 flex gap-2">
             <Link :href="route('threads.edit', thread.id)" class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded font-semibold">
                 <!-- Edit Icon -->
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
