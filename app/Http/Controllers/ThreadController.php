@@ -54,10 +54,9 @@ class ThreadController extends Controller
             'title' => 'required|string|max:255',
             'body' => 'required|string',
             'category_id' => 'required|exists:categories,id',
-            'tags' => 'required|exists:tags,id',
+            'tags' => 'nullable|exists:tags,id',
         ], [
             'category_id.required' => 'The category field is required.',
-            'tags.required' => 'Please select at least one tag.',
         ]);
 
         $thread = Thread::create([

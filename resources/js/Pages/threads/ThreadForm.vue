@@ -88,9 +88,11 @@
             </div>
             <!-- Tags Input (only tag ids in form, show names in UI) -->
             <div>
+                <div class="flex flex-row gap-2 items-center justify-between">
                 <label class="block text-lg font-semibold text-gray-700 mb-2"
                     >Tags</label
-                >
+                ><span class="text-sm text-gray-500">(Optional)</span>
+                </div>
                 <div class="flex flex-wrap gap-2 mb-2">
                     <span
                         v-for="tagId in form.tags"
@@ -107,16 +109,17 @@
                         </button>
                     </span>
                 </div>
-                <input
+                <span class="text-gray-700">Select a tag</span>
+                <!-- <input
                     v-model="tagInput"
                     @keydown.enter.prevent="addTag"
                     type="text"
                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
                     placeholder="Add a tag and press Enter"
-                />
-                <span v-if="errors.tags" class="text-red-500 text-sm">{{
+                /> -->
+                <!-- <span v-if="errors.tags" class="text-red-500 text-sm">{{
                     errors.tags
-                }}</span>
+                }}</span> -->
                 <div class="mt-2 flex flex-wrap gap-2">
                     <span
                         v-for="tag in tags"
@@ -169,9 +172,9 @@ export default {
     data() {
         return {
             form: {
-                title: this.thread?.title,
-                body: this.thread?.body,
-                category_id: this.thread?.category_id,
+                title: this.thread?.title || '',
+                body: this.thread?.body || '',
+                category_id: this.thread?.category_id || '',
                 tags: this.thread?.tags
                     ? this.thread.tags.map((tag) => tag.id)
                     : [],
