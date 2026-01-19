@@ -43,7 +43,6 @@ const submit = () => {
                         type="text"
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 mt-1"
                         v-model="form.name"
-                        required
                         autofocus
                         autocomplete="name"
                     />
@@ -60,7 +59,6 @@ const submit = () => {
                         type="email"
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 mt-1"
                         v-model="form.email"
-                        required
                         autocomplete="username"
                     />
                     <InputError class="mt-2" :message="form.errors.email" />
@@ -76,7 +74,6 @@ const submit = () => {
                         type="password"
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 mt-1"
                         v-model="form.password"
-                        required
                         autocomplete="new-password"
                     />
                     <InputError class="mt-2" :message="form.errors.password" />
@@ -92,7 +89,6 @@ const submit = () => {
                         type="password"
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 mt-1"
                         v-model="form.password_confirmation"
-                        required
                         autocomplete="new-password"
                     />
                     <InputError

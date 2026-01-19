@@ -91,7 +91,7 @@
                         <span class="font-semibold text-indigo-700">{{ reply.user?.name || 'Anonymous' }}</span>
                         </div>
                         <div>
-                        <span class="text-gray-400 text-xs">{{ moment(reply.created_at).format('MMM D, YYYY, h:mm A') }}</span>
+                        <span class="text-gray-400 text-xs">{{ moment(reply.created_at).fromNow() }}</span>
                         </div>
                     </div>
                     <div v-if="reply.editing">

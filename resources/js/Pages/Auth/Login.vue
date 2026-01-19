@@ -59,7 +59,6 @@ const submit = () => {
                         type="email"
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 mt-1"
                         v-model="form.email"
-                        required
                         autofocus
                         autocomplete="username"
                     />
@@ -77,7 +76,6 @@ const submit = () => {
                         type="password"
                         class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 mt-1"
                         v-model="form.password"
-                        required
                         autocomplete="current-password"
                     />
                     <InputError class="mt-2" :message="form.errors.password" />
