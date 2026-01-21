@@ -60,15 +60,23 @@
                             rows="3"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
                             placeholder="Write your reply..."
-                            required
                         ></textarea>
                         <div class="flex justify-end">
                             <button
-                                type="submit"
-                                class="bg-indigo-600 text-white font-bold px-6 py-2 rounded-lg shadow hover:bg-indigo-700 transition"
-                                :disabled="replyProcessing"
+                                v-if="replyBody==''"
+                                type="button"
+                                class="bg-indigo-400 text-white font-bold px-6 py-2 rounded-lg shadow cursor-not-allowed opacity-60 transition"
+                                disabled
                             >
                                 Reply
+                            </button>
+                            <button
+                                v-else
+                                type="submit"
+                                class="bg-indigo-600 text-white font-bold px-6 py-2 rounded-lg shadow hover:bg-indigo-700 transition enabled:hover:bg-indigo-700 disabled:opacity-60 disabled:cursor-not-allowed"
+                                :disabled="replyProcessing"
+                            >
+                                {{ replyProcessing ? 'Posting...' : 'Reply' }}
                             </button>
                         </div>
                     </form>
@@ -103,6 +111,15 @@
                         ></textarea>
                         <div class="flex justify-end">
                             <button
+                                v-if="reply.editBody==''"
+                                @click="updateReply(reply)"
+                                class="bg-indigo-400 text-white font-bold px-4 py-2 rounded-lg shadow cursor-not-allowed opacity-60 transition"
+                                disabled
+                            >
+                                Save
+                            </button>
+                            <button
+                                v-else
                                 @click="updateReply(reply)"
                                 class="bg-indigo-600 text-white font-bold px-4 py-2 rounded-lg shadow hover:bg-indigo-700 transition"
                             >

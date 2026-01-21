@@ -1,8 +1,23 @@
 <script setup>
-import { ref, watch } from 'vue';
-import { Head, Link, router } from '@inertiajs/vue3';
+import { ref, watch, computed } from 'vue';
+import { Head, Link, router, usePage } from '@inertiajs/vue3';
 import moment from 'moment';
-import { usePage } from '@inertiajs/vue3';
+
+const page = usePage();
+
+// Determine page title based on current route
+const pageTitle = computed(() => {
+    const route = page.url;
+    const baseRoute = route.split('?')[0]; // Remove query parameters
+
+    if (baseRoute === '/') return 'Home';
+    if (baseRoute.includes('/threads/')) return 'Thread';
+    if (baseRoute.includes('/profile') || baseRoute.includes('/user/')) return 'Profile';
+    if (baseRoute.includes('/admin')) return 'Admin Dashboard';
+    if (baseRoute.includes('/new-thread')) return 'New Thread';
+    if (baseRoute.includes('/edit')) return 'Edit';
+    return 'Forum';
+});
 
 // const search = ref('');
 
@@ -13,7 +28,7 @@ import { usePage } from '@inertiajs/vue3';
 </script>
 
 <template>
-    <Head title="Forum Home" />
+    <Head :title="pageTitle" />
     <!-- Top Navigation Bar -->
     <nav class="fixed top-0 left-0 w-full z-50 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 shadow-lg">
         <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
