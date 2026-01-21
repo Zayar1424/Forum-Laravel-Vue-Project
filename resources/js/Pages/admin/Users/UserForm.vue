@@ -147,7 +147,7 @@ export default {
       form: {
         name: this.user?.name || '',
         email: this.user?.email || '',
-        role: this.user?.is_admin || '',
+        role: this.user?.is_admin || 0,
         password: this.user?.password || '',
       },
       submitting: false,
