@@ -17,6 +17,8 @@ class ThreadController extends Controller
         } elseif(request('filter') === 'followed_threads' && Auth::check()) {
             $followedIDs = Auth::user()->following->pluck('id');
             $threads = $threads->whereIn('user_id', $followedIDs)->with(['category', 'user', 'replies'])->latest()->get();
+        } elseif(request('filter') === 'most_views') {
+            $threads = $threads->orderBy('view_count', 'desc')->with(['category', 'user', 'replies'])->get();
         } else {
             $threads = $threads->latest()->get();
         }
@@ -26,6 +28,9 @@ class ThreadController extends Controller
     }
 
     public function show(Thread $thread) {
+        // Increment view count
+        $thread->increment('view_count');
+
         $thread->load([
         'category',
         'user',

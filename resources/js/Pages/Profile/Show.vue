@@ -108,7 +108,42 @@
                 </p>
             </div>
         </div>
-        <h2 class="text-lg font-semibold text-gray-800 mb-2 mt-8">{{ user.name }}'s Threads</h2>
+
+        <!-- Beautiful Tab Section -->
+        <div class="mt-10 mb-6">
+            <div class="flex gap-2 bg-gradient-to-r from-gray-50 to-gray-100 p-1 rounded-xl shadow-sm border border-gray-200">
+                <button
+                    @click="openThread()"
+                    :class="[
+                        'flex-1 px-6 py-3 font-semibold rounded-lg transition-all duration-200',
+                        isThread
+                            ? 'bg-gradient-to-r from-indigo-600 to-blue-500 text-white shadow-lg'
+                            : 'text-gray-600 hover:text-gray-800 hover:bg-white/50'
+                    ]"
+                >
+                    <svg class="inline w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    Threads
+                </button>
+                <button
+                    @click="openReply()"
+                    :class="[
+                        'flex-1 px-6 py-3 font-semibold rounded-lg transition-all duration-200',
+                        !isThread
+                            ? 'bg-gradient-to-r from-indigo-600 to-blue-500 text-white shadow-lg'
+                            : 'text-gray-600 hover:text-gray-800 hover:bg-white/50'
+                    ]"
+                >
+                    <svg class="inline w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                    </svg>
+                    Replies
+                </button>
+            </div>
+        </div>
+        <div v-if="isThread">
+        <h2 class="text-lg font-semibold text-gray-800 mb-2">{{ user.name }}'s Threads</h2>
         <!-- Threads -->
         <div v-if="user.threads && user.threads.length" class="space-y-6">
             <div v-for="thread in user.threads" :key="thread.id" class="bg-white rounded-lg shadow p-6 flex flex-col md:flex-row md:items-center justify-between relative">
@@ -124,17 +159,23 @@
                     <div class="flex gap-6">
                         <span class="text-gray-400">
                             <svg class="inline w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                            {{ formatNumber(thread.view_count ? thread.view_count : 0) }}
+
+                            · <svg class="inline w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
                             </svg>
-                            {{ thread.replies.length }} {{ thread.replies.length > 1 ? 'replies' : 'reply' }}
-                        </span>
+                            {{ formatNumber(thread.replies.length) }}
+
                         <!-- <span class="text-gray-400">
                             <svg class="inline w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5"></path>
                             </svg>
                             {{ thread.views }} views
                         </span> -->
-                        <Link :href="'/threads/'+thread.id" class="text-indigo-600 hover:underline">View</Link>
+                        · <Link :href="'/threads/'+thread.id" class="text-indigo-600 hover:underline">View</Link>
+                        </span>
                     </div>
                     <!-- Edit & Delete buttons at bottom right -->
                     <div
@@ -167,8 +208,9 @@
             </div>
         </div>
         <div v-else class="text-gray-400 italic">No threads yet.</div>
+        </div>
         <!-- Replies -->
-        <div class="mt-8">
+        <div v-if="isReply" class="">
             <h2 class="text-lg font-semibold text-gray-800 mb-2">{{ user.name }}'s Replies</h2>
             <!-- Replies List -->
             <div v-if="user.replies && user.replies.length" class="space-y-6">
@@ -259,6 +301,8 @@ export default {
             replyError: '',
             replyToDelete: null,
             showModal: false,
+            isThread: true,
+            isReply: false,
         }
     },
     components: {
@@ -298,6 +342,15 @@ export default {
             })
         },
         moment,
+        formatNumber(num) {
+            // Format number to show 1k, 1.1k, etc. for numbers >= 1000
+            if (num >= 1000) {
+                const k = num / 1000;
+                // If it's a whole number like 1000, show as 1k. Otherwise show one decimal like 1.1k
+                return k % 1 === 0 ? k.toFixed(0) + 'k' : k.toFixed(1) + 'k';
+            }
+            return num.toString();
+        },
         goBack() {
             // Try to go back in browser history first
             if (window.history.length > 1) {
@@ -352,6 +405,14 @@ export default {
                     this.replyProcessing = false
                 }
             })
+        },
+        openThread() {
+            this.isThread = true;
+            this.isReply = false;
+        },
+        openReply() {
+            this.isThread = false;
+            this.isReply = true;
         },
     },
 };

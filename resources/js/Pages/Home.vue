@@ -19,6 +19,7 @@
           >
             <option value="latest">Latest</option>
             <option value="most_replied">Most replied</option>
+            <option value="most_views">Most viewed</option>
             <option v-if="$page.props.auth.user" value="followed_threads">Followed threads</option>
           </select>
           <svg class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -50,9 +51,13 @@
         <div class="flex flex-col gap-2 mt-4 md:mt-0 items-end">
           <div class="text-gray-400">
             <svg class="inline w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+            </svg>
+            {{ formatNumber(thread.view_count ? thread.view_count : 0) }}
+            · <svg class="inline w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
             </svg>
-            {{ thread.replies?.length || 0 }} {{ (thread.replies?.length || 0) > 1 ? 'replies' : 'reply' }}
+            {{ formatNumber(thread.replies?.length || 0) }}
             · <Link :href="route('threads.show', thread.id)" class="text-indigo-600 hover:underline">View</Link>
           </div>
 
@@ -127,15 +132,27 @@ export default {
       filter: this.$page?.props?.filter || 'latest',
       showModal: false,
       threadToDelete: null,
+      syncingFromUrl: false,      // flag to prevent watcher from triggering during URL sync
     }
   },
   mounted() {
+    // First sync filter from URL to ensure it matches the current URL params
+    this.syncFilterFromUrl()
     this.setThreadsFromProps()
+    // Listen for popstate events (browser back/forward button)
+    window.addEventListener('popstate', this.syncFilterFromUrl)
+  },
+  beforeUnmount() {
+    window.removeEventListener('popstate', this.syncFilterFromUrl)
   },
   watch: {
     // When the user changes the filter, request the server. preserveState: true keeps component instance,
     // we rely on the $page.props.threads watcher below to sync the local array.
     filter() {
+      // Skip making a request if we're just syncing from URL
+      if (this.syncingFromUrl) {
+        return
+      }
       this.currentPage = 1
       this.$inertia.get(window.location.pathname, { filter: this.filter }, { preserveState: true, replace: true })
     },
@@ -147,6 +164,15 @@ export default {
         this.currentPage = 1
       },
       deep: false,
+    },
+
+    // Watch the filter from props to sync when returning via history
+    '$page.props.filter': {
+      handler(newFilter) {
+        if (newFilter !== undefined) {
+          this.filter = newFilter
+        }
+      },
     },
   },
   computed: {
@@ -168,6 +194,26 @@ export default {
     },
   },
   methods: {
+    // Format number to show 1k, 1.1k, etc. for numbers >= 1000
+    formatNumber(num) {
+      if (num >= 1000) {
+        const k = num / 1000;
+        return k % 1 === 0 ? k.toFixed(0) + 'k' : k.toFixed(1) + 'k';
+      }
+      return num.toString();
+    },
+    // Sync filter from URL query params (used when returning via browser history)
+    syncFilterFromUrl() {
+      const params = new URLSearchParams(window.location.search)
+      const urlFilter = params.get('filter') || 'latest'
+      // Set flag to prevent the filter watcher from making an unnecessary request
+      this.syncingFromUrl = true
+      this.filter = urlFilter
+      // Reset flag after next tick so it doesn't interfere with subsequent filter changes
+      this.$nextTick(() => {
+        this.syncingFromUrl = false
+      })
+    },
     // initialize threadsList from Inertia props (supports paginator or array)
     setThreadsFromProps() {
       const p = this.$page?.props?.threads
