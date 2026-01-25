@@ -12,18 +12,20 @@ const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 createInertiaApp({
     title: (title) => `${appName} | ${title}`,
-        resolve: (name) =>{
-        const pages = import.meta.glob('./Pages/**/*.vue', { eager: true })
-        let page = pages[`./Pages/${name}.vue`]
-        // Decide layout based on the page name (works with Inertia client-side visits)
-        if (name && name.toString().startsWith('admin/')) {
-            page.default.layout = AdminLayout;
-        }
-        if (page && page.default && page.default.layout === undefined) {
-            page.default.layout = UserLayout;
-        }
-        return page;
-  },
+        resolve: async (name) => {
+    const page = await resolvePageComponent(
+        `./Pages/${name}.vue`,
+        import.meta.glob('./Pages/**/*.vue')
+    );
+
+    if (name.startsWith('admin/')) {
+        page.default.layout = AdminLayout;
+    } else if (page.default.layout === undefined) {
+        page.default.layout = UserLayout;
+    }
+
+    return page;
+},
     setup({ el, App, props, plugin }) {
         return createApp({ render: () => h(App, props) })
             .use(plugin)
