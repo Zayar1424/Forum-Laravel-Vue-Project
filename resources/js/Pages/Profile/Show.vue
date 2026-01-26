@@ -1,5 +1,5 @@
 <template>
-    <div class="max-w-3xl mx-auto mt-10 p-6 bg-white shadow-xl rounded-2xl">
+    <div class="max-w-3xl mx-auto md:mt-16 p-5 md:p-10 bg-white shadow-xl rounded-2xl">
         <div class="mb-6 w-24">
             <button
                 @click="goBack"

@@ -3,7 +3,7 @@
     <!-- Header -->
     <div class="flex items-center justify-between mb-6">
       <h1 class="text-2xl font-bold text-gray-900">Forum Threads</h1>
-      <div class="flex flex-col lg:flex-row items-center gap-3">
+      <div class="flex flex-col md:flex-row gap-3">
         <Link
           v-if="$page.props.auth.user"
           href="/new-thread"
@@ -15,7 +15,7 @@
         <div class="relative">
           <select
             v-model="filter"
-            class="appearance-none bg-white px-4 py-2 pr-10 text-sm font-medium text-gray-700 border border-gray-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-200 transition"
+            class="appearance-none bg-white px-4 py-2 text-sm font-medium text-gray-700 border border-gray-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-200 transition"
           >
             <option value="latest">Latest</option>
             <option value="most_replied">Most replied</option>

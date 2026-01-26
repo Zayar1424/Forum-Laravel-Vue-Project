@@ -36,7 +36,7 @@ const pageTitle = computed(() => {
                 <!-- Hamburger Menu Button for Mobile -->
                 <button
                     @click="mobileMenuOpen = !mobileMenuOpen"
-                    class="md:hidden text-white hover:text-indigo-200 transition"
+                    class="lg:hidden text-white hover:text-indigo-200 transition"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path v-if="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -62,9 +62,9 @@ const pageTitle = computed(() => {
                     <div>
                         <Link href="/login" class="bg-white text-indigo-700 font-bold px-4 py-2 rounded-lg shadow hover:bg-indigo-100 transition">Login</Link>
                     </div>
-                    <div>
+                    <!-- <div>
                         <Link href="/register" class="bg-indigo-500 text-white font-bold px-4 py-2 rounded-lg shadow hover:bg-indigo-700 transition">Register</Link>
-                    </div>
+                    </div> -->
                     </div>
                 </template>
                 <template v-else>
@@ -117,13 +117,13 @@ const pageTitle = computed(() => {
     <div
         v-if="mobileMenuOpen"
         @click="mobileMenuOpen = false"
-        class="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm md:hidden"
+        class="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden"
     ></div>
 
     <!-- Mobile Sidebar Menu -->
     <aside
         v-if="mobileMenuOpen"
-        class="fixed left-0 top-20 h-[calc(100vh-80px)] w-72 bg-gradient-to-b from-white via-indigo-50 to-purple-50 shadow-2xl z-40 md:hidden overflow-y-auto"
+        class="fixed left-0 top-20 h-[calc(100vh-80px)] w-72 bg-gradient-to-b from-white via-indigo-50 to-purple-50 shadow-2xl z-40 lg:hidden overflow-y-auto"
     >
         <div class="p-6 space-y-8">
             <!-- Categories Section -->
@@ -157,7 +157,7 @@ const pageTitle = computed(() => {
 
     <div class="bg-gradient-to-br from-indigo-50 via-white to-purple-100 min-h-screen flex pt-24">
     <!-- Desktop Sidebar -->
-    <aside class="hidden md:flex w-80 bg-white/90 border-r border-gray-200 p-8 flex-col gap-10 shadow-xl rounded-r-3xl mt-8 ml-8 mb-6 h-fit">
+    <aside class="hidden lg:flex w-80 bg-white/90 border-r border-gray-200 p-8 flex-col gap-10 shadow-xl rounded-r-3xl mt-8 ml-8 mb-6 h-fit">
             <!-- Categories Section (on top) -->
             <div>
                 <h2 class="text-xl font-bold text-indigo-700 mb-5 tracking-wide">Categories</h2>
@@ -179,7 +179,7 @@ const pageTitle = computed(() => {
             </div>
         </aside>
         <!-- Main Content -->
-        <main class="flex-1 px-12 py-10">
+        <main class="flex-1 px-5 md:px-12 py-10">
             <slot />
         </main>
     </div>
