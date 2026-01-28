@@ -75,7 +75,7 @@
                 >
                     <option value="" disabled>Select a category</option>
                     <option
-                        v-for="category in categories"
+                        v-for="category in filteredCategories"
                         :key="category.id"
                         :value="category.id"
                     >
@@ -164,6 +164,9 @@ export default {
         },
         categories() {
             return usePage().props.categories || [];
+        },
+        filteredCategories() {
+            return this.categories.filter(cat => cat.name !== 'Announcements');
         },
         tags() {
             return usePage().props.tags || [];

@@ -90,7 +90,7 @@
                     :key="reply.id"
                     class="bg-indigo-50 rounded-xl p-6 shadow flex flex-col gap-2"
                 >
-                    <div class="flex flex-col md:flex-row md:items-center gap-3 mb-2">
+                    <div class="flex flex-col md:flex-row md:items-center gap-1 md:gap-3 mb-2">
                         <div class="flex flex-row gap-2 items-center">
                         <Link :href="route('user.show', reply.user.id)" class=" w-8 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-500 flex items-center justify-center text-white font-bold text-xl">
                             {{ (reply.user?.name || 'A').charAt(0).toUpperCase() }}

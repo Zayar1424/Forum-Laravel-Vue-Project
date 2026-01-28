@@ -65,7 +65,7 @@
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                     </svg>
-                    Unfollow
+                    Following
                 </button>
             </div>
         </div>
@@ -148,16 +148,16 @@
         <div v-if="user.threads && user.threads.length" class="space-y-6">
             <div v-for="thread in user.threads" :key="thread.id" class="bg-white rounded-lg shadow p-6 flex flex-col md:flex-row md:items-center justify-between relative">
                 <div class="flex-[3]">
-                    <h2 class="text-lg font-semibold text-gray-800">{{ thread.title }}</h2>
+                    <Link :href="route('threads.show', thread.id)"><h2 class="text-lg font-semibold text-gray-800">{{ thread.title }}</h2></Link>
                     <p class="mt-2 line-clamp-2">{{ thread.body }}</p>
                     <div class="text-gray-500 mt-3">
                         </div>
-                    <span class="text-gray-400 mt-2">{{ moment(thread.created_at, "YYYYMMDD").fromNow() }}</span>
+                    <span class="text-gray-400 mt-2 text-sm">{{ moment(thread.created_at, "YYYYMMDD").fromNow() }}</span>
                 </div>
                 <div class="flex flex-col gap-2 mt-4 md:mt-0">
                     <!-- Replies, Views, View (horizontal group) -->
                     <div class="flex gap-6">
-                        <span class="text-gray-400">
+                        <span class="text-gray-400 text-sm">
                             <svg class="inline w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                             </svg>
@@ -238,7 +238,7 @@
                         </svg>
                         See original thread
                     </Link>
-                    <div class="flex flex-col md:flex-row md:items-center gap-3 mb-2">
+                    <div class="flex flex-col md:flex-row md:items-center gap-1 md:gap-3 mb-2">
                         <div class="flex flex-row gap-2">
                         <p
                             class="hidden md:flex w-8 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-500 flex items-center justify-center text-white font-bold text-xl"

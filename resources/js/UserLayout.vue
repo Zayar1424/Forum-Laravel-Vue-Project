@@ -47,7 +47,7 @@ const pageTitle = computed(() => {
                     <Link href="/" class="hover:text-indigo-200 transition">Code Forum</Link>
                 </span>
             </div>
-            <!-- Search Bar -->
+            <!-- Search Bar (Desktop) -->
             <form @submit.prevent class="hidden md:flex items-center gap-3 w-full max-w-xl mx-8">
                 <input
                     v-model="search"
@@ -56,7 +56,16 @@ const pageTitle = computed(() => {
                     class="w-full px-4 py-2 rounded-lg border border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-400"
                 />
             </form>
-            <div class="flex items-center gap-8">
+            <div class="flex items-center gap-4 md:gap-8">
+                <!-- Search Icon (Mobile) -->
+                <button
+                    @click="mobileSearchOpen = !mobileSearchOpen"
+                    class="md:hidden text-white hover:text-indigo-200 transition"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </button>
                 <template v-if="!$page.props.auth.user">
                     <div class="flex flex-col md:flex-row gap-4">
                     <div>
@@ -112,6 +121,32 @@ const pageTitle = computed(() => {
             </div>
         </div>
     </nav>
+
+    <!-- Mobile Search Bar -->
+    <div
+        v-if="mobileSearchOpen"
+        class="fixed top-20 left-0 w-full z-40 bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 border-b-2 border-indigo-400 shadow-lg md:hidden"
+    >
+        <div class="max-w-7xl mx-auto px-6 py-4">
+            <form @submit.prevent class="flex items-center gap-3">
+                <input
+                    v-model="search"
+                    type="text"
+                    placeholder="Search threads..."
+                    autofocus
+                    class="w-full px-4 py-2 rounded-lg border border-indigo-300 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                />
+                <button
+                    @click="mobileSearchOpen = false"
+                    class="text-white hover:text-indigo-200 transition"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </form>
+        </div>
+    </div>
 
     <!-- Mobile Menu Overlay -->
     <div
@@ -187,13 +222,10 @@ const pageTitle = computed(() => {
 
 <script>
 export default {
-    name: 'Home',
-    props: {
-        threads: Array,
-    },
     data() {
         return {
             search: '',
+            mobileSearchOpen: false,
             mobileMenuOpen: false,
             profileDropdownOpen: false,
         };
@@ -206,7 +238,9 @@ export default {
         }
     },
     methods: {
-
+        closeMobileSearch() {
+            this.mobileSearchOpen = false;
+        }
     },
     mounted() {
 
