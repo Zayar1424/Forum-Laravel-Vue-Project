@@ -143,7 +143,7 @@
             </div>
         </div>
         <div v-if="isThread">
-        <h2 class="text-lg font-semibold text-gray-800 mb-2">{{ user.name }}'s Threads</h2>
+        <h2 class="text-lg font-semibold text-gray-800 mb-2">{{ user.name.split(' ')[0] }}'s Threads</h2>
         <!-- Threads -->
         <div v-if="user.threads && user.threads.length" class="space-y-6">
             <div v-for="thread in user.threads" :key="thread.id" class="bg-white rounded-lg shadow p-6 flex flex-col md:flex-row md:items-center justify-between relative">
@@ -211,7 +211,7 @@
         </div>
         <!-- Replies -->
         <div v-if="isReply" class="">
-            <h2 class="text-lg font-semibold text-gray-800 mb-2">{{ user.name }}'s Replies</h2>
+            <h2 class="text-lg font-semibold text-gray-800 mb-2">{{ user.name.split(' ')[0] }}'s Replies</h2>
             <!-- Replies List -->
             <div v-if="user.replies && user.replies.length" class="space-y-6">
                 <div
