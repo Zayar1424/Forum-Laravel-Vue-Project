@@ -15,7 +15,7 @@
         <div class="relative">
           <select
             v-model="filter"
-            class="appearance-none bg-white px-4 py-2 text-sm font-medium text-gray-700 border border-gray-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-200 transition"
+            class="appearance-none bg-white px-4 py-2 text-sm font-medium text-gray-700 border border-gray-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-200 transition w-[160px]"
           >
             <option value="latest">Latest</option>
             <option value="most_replied">Most replied</option>
