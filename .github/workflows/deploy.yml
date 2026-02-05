@@ -1,0 +1,43 @@
+name: Auto Deploy Laravel App
+
+on:
+  push:
+    branches:
+      - master
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to DigitalOcean
+        uses: appleboy/ssh-action@master
+        with:
+          host: 157.230.249.128
+          username: root
+          key: ${{ secrets.SERVER_SECRET_KEY }}
+          port: 22
+          script: |
+            cd /var/www/html
+
+            php artisan down || true
+
+            git reset --hard
+            git clean -df
+            git pull origin master
+
+            composer install --no-interaction --prefer-dist --optimize-autoloader
+
+            php artisan migrate
+            php artisan config:clear
+            php artisan route:clear
+            php artisan view:clear
+
+            npm install
+            npm run build
+
+            php artisan up
