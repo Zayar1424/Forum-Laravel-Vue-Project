@@ -2,7 +2,7 @@
   <div class="max-w-4xl mx-auto p-0 md:p-6">
     <!-- Header -->
     <div class="flex items-center justify-between mb-6">
-      <h1 class="text-2xl font-bold text-gray-900">Forum Threads</h1>
+      <h1 class="text-2xl font-bold text-gray-900">Forum Threads Deploy Test</h1>
       <div class="flex flex-col md:flex-row gap-3">
         <Link
           v-if="$page.props.auth.user"
